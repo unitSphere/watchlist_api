@@ -1,0 +1,19 @@
+html
+    head
+        link(rel="stylesheet" type="text/css" href="/css/watchlists.css")
+    body(onload='first()')
+        section
+            div
+                div#input-div
+                    input#input-box(type="text" placeholder='Input Watchlist name...' onkeyup='enter_key_handler()')
+                    button#search-button(onclick='addHandler()') Add
+            div
+                div#watchlist-div
+                    ul#wl-list
+                        li
+                            h3
+                            button Delete
+                            button View
+
+
+
