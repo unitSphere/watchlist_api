@@ -5,8 +5,13 @@ const express = require('express');
 const app = express();
 const pug = require('pug');
 const watchlistsRouter = require('./routes/wl_router.js');
+const detailsRouter = require('./routes/details_router.js');
+const stocksRouter = require('./routes/stocks_router.js');
+
 
 app.use('/watchlists', watchlistsRouter);
+app.use('/details', detailsRouter);
+app.use('/stocks', stocksRouter);
 
 app.set('view engine', 'pug');
 
@@ -15,6 +20,8 @@ app.set('view engine', 'pug');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://urustam510:rrustam510@cluster0-shard-00-00-ehwsx.mongodb.net:27017,cluster0-shard-00-01-ehwsx.mongodb.net:27017,cluster0-shard-00-02-ehwsx.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true');
 const db = mongoose.connection;
+global.ObjectId = mongoose.Types.ObjectId;
+
 app.use(express.static("public"));
 
 // Upon connection failure
@@ -26,7 +33,7 @@ db.once('open', function () {
 });
 
 global.WatchlistSchema = mongoose.Schema({
-    watchlist_name: {type: String, required: true, unique: true},
+    name: {type: String, required: true, unique: true},
     assets: {type: Array}
 });
 

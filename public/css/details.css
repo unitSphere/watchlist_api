@@ -1,0 +1,85 @@
+#header-div{
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    width: 980px;
+    background-color: #95a5a6;
+    text-align: center;
+}
+
+#header-text{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: auto;
+}
+
+
+#input-div{
+    margin: auto;
+    width: 980px;
+    padding: 8px
+}
+
+#input-box{
+    width: 925px;
+    padding: 8px;
+}
+
+
+
+#add-button{
+    height: 35px;
+    width: 55px;
+    float: right;
+}
+
+#stock-div {
+    font-family: arial, sans-serif;
+    margin: auto;
+    width: 980px;
+    padding: 8px;
+}
+
+
+.stock-list{
+    list-style-type: none;
+    padding-inline-start: 0px;
+
+}
+
+.stock-list li {
+    padding: 10px;
+    border: 1px solid #dddddd;
+}
+
+.stock-list li > div{
+    float: right;
+}
+
+.stock-list li > div > button{
+    margin-left: 5px;
+}
+
+.ticker{
+    margin-right: 50px;
+}
+
+#result-div{
+    margin: auto;
+    width: 980px;
+    padding: 8px
+}
+
+datalist{
+    display: inline-block;
+    width: 925px;
+}
+
+#fullUL{
+    width: 100%;
+    display: none;
+}
+
+#fullUL > option:hover{
+    background-color: #95a5a6;
+}

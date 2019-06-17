@@ -1,0 +1,88 @@
+#header-div{
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    width: 980px;
+    background-color: #95a5a6;
+    text-align: center;
+}
+
+#header-text{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: auto;
+}
+
+
+
+#price-table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    margin: auto;
+    width: 980px;
+    padding: 8px;
+}
+
+#price-table tr:nth-child(even){background-color: #f2f2f2;}
+
+#price-table td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+#price-table th{
+    background: #95a5a6;
+}
+
+table > tr > td > button{
+    margin-left: 5px;
+}
+
+#input-div{
+    margin: auto;
+    width: 980px;
+    padding: 8px
+}
+
+#input-box{
+    width: 925px;
+    padding: 8px;
+}
+
+
+
+#add-button{
+    height: 35px;
+    width: 55px;
+    float: right;
+}
+
+#return-div{
+    margin: auto;
+    width: 980px;
+    padding-top: 10px;
+}
+
+#return-table{
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    margin: auto;
+}
+
+#return-table th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    background: #95a5a6;
+}
+
+#return-table td{
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
+
+.st{
+    font-weight: bold;
+}

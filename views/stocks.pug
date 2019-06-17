@@ -1,49 +1,145 @@
 html
     head
-        link(rel="stylesheet" type="text/css" href="/stylesheets/style.css")
-        script(src="/js/stocks.js")
+        link(rel="stylesheet" type="text/css" href="/css/stocks.css")
+    body(onload='loadInfo()')
+        section
+            div
+                div#header-div
+                    h3#header-text
+            div
+                div#input-div
+                    input#input-box(type="text", placeholder='Input Stock name...', list='fullUL', onkeyup='searchHandler()')
+                    button#add-button(onclick='addHandler()') Add
+                datalist#fullUL
+            div
+                table#price-table
+                    tr
+                        th Market
+                        th Symbol/Ticker
+                        th Name
+                        th Price
+                        th Action
 
-    body
-        .ripple-background
-            .circle.xxlarge.shade1
-            .circle.xlarge.shade2
-            .circle.large.shade3
-            .circle.mediun.shade4
-            .circle.small.shade5
-
-        div
-            h1#result #{result}
-
-        div#parentInput
-            h1 Watchlist name: #{JSON.parse(result).name}
-            div#Input
-                input#myInput(type='text',list='fullUL', onkeyup='searchHandler()', placeholder='Search for names..')
-                button#add
-                    svg(version='1.1', xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', x='0px', y='0px', viewBox='0 0 16 16', style='enable-background:new 0 0 16 16;', xml:space='preserve')
-                        g
-                            path.fill(d='M16,8c0,0.5-0.5,1-1,1H9v6c0,0.5-0.5,1-1,1s-1-0.5-1-1V9H1C0.5,9,0,8.5,0,8s0.5-1,1-1h6V1c0-0.5,0.5-1,1-1s1,0.5,1,1v6h6C15.5,7,16,7.5,16,8z')
-
-            datalist#fullUL
-
-            div#Stocks
-                ul.todo#added
-            button(onclick="updateDB()")#update UPDATE
-
-
+            div
+                div#return-div
+                    table#return-table
+                        tr#st-row
+                            th Symbol/Ticker
+                        tr#day-row
+                            th Daily Percentage
+                        tr#week-row
+                            th Weekly Percentage
+                        tr#month-row
+                            th Monthly Percentage
+                        tr#ytd-row
+                            th YTD Percentage
+                        tr#year-row
+                            th 1 Year Percentage
+                        tr#three-row
+                            th 3 Year Percentage
+                        tr#five-row
+                            th 5 Year Percentage
+                        tr#date-row
+                            th Last Updated
 
     script.
-        var removeSVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve"><rect class="noFill" width="22" height="22"/><g><g><path class="fill" d="M16.1,3.6h-1.9V3.3c0-1.3-1-2.3-2.3-2.3h-1.7C8.9,1,7.8,2,7.8,3.3v0.2H5.9c-1.3,0-2.3,1-2.3,2.3v1.3c0,0.5,0.4,0.9,0.9,1v10.5c0,1.3,1,2.3,2.3,2.3h8.5c1.3,0,2.3-1,2.3-2.3V8.2c0.5-0.1,0.9-0.5,0.9-1V5.9C18.4,4.6,17.4,3.6,16.1,3.6z M9.1,3.3c0-0.6,0.5-1.1,1.1-1.1h1.7c0.6,0,1.1,0.5,1.1,1.1v0.2H9.1V3.3z M16.3,18.7c0,0.6-0.5,1.1-1.1,1.1H6.7c-0.6,0-1.1-0.5-1.1-1.1V8.2h10.6V18.7z M17.2,7H4.8V5.9c0-0.6,0.5-1.1,1.1-1.1h10.2c0.6,0,1.1,0.5,1.1,1.1V7z"/></g><g><g><path class="fill" d="M11,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6s0.6,0.3,0.6,0.6v6.8C11.6,17.7,11.4,18,11,18z"/></g><g><path class="fill" d="M8,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6c0.4,0,0.6,0.3,0.6,0.6v6.8C8.7,17.7,8.4,18,8,18z"/></g><g><path class="fill" d="M14,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6c0.4,0,0.6,0.3,0.6,0.6v6.8C14.6,17.7,14.3,18,14,18z"/></g></g></g></svg>';
-        var viewSVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve"><rect y="0" class="noFill" width="22" height="22"/><g><path class="fill" d="M9.7,14.4L9.7,14.4c-0.2,0-0.4-0.1-0.5-0.2l-2.7-2.7c-0.3-0.3-0.3-0.8,0-1.1s0.8-0.3,1.1,0l2.1,2.1l4.8-4.8c0.3-0.3,0.8-0.3,1.1,0s0.3,0.8,0,1.1l-5.3,5.3C10.1,14.3,9.9,14.4,9.7,14.4z"/></g></svg>';
+        let search_result = [];
+        let page_id;
+        function loadInfo(){
+            let res = !{result};
+            page_id = res.symbol;
+            document.getElementById('header-text').innerText = 'Stock Ticker/Symbol: ' + res.symbol;
+            let row = document.createElement('tr');
+            let market_td = document.createElement('td');
+            let symbol = document.createElement('td');
+            let name_td = document.createElement('td');
+            let price_td = document.createElement('td');
+            market_td.innerText = res.market;
+            symbol.innerText = res.symbol;
+            price_td.innerText = res.price.toFixed(2);
+            name_td.innerText = res.stock_name;
+            row.appendChild(market_td);
+            row.appendChild(symbol);
+            row.appendChild(name_td);
+            row.appendChild(price_td);
+            row.appendChild(document.createElement('td'));
 
-        let data_json = JSON.parse(document.getElementById('result').innerText);
-        let data = {assets: data_json.assets, _id: data_json._id, name: data_json.name};
-        let current_data = [];
-        for(let i = 0; i < data.assets.length; i++){
-            addItemToDOM(data.assets[i]);
-        }
-        console.log(data_json);
+            document.getElementById('price-table').appendChild(row);
+
+            let symbol_td = document.createElement("td")
+            symbol_td.classList.add('st');
+            symbol_td.innerText = res.symbol;
+            document.getElementById('st-row').appendChild(symbol_td);
+            let day_td = document.createElement("td");
+            let week_td = document.createElement("td");
+            let month_td = document.createElement("td");
+            let year_td = document.createElement("td");
+            let ytd_td = document.createElement("td");
+            let three_td = document.createElement("td");
+            let five_td = document.createElement("td");
+            let last_update_td = document.createElement('td');
+            last_update_td.innerText = res.last_update;
+            document.getElementById('date-row').appendChild(last_update_td);
+            if (res.day_return) {
+                day_td.innerText = res.day_return.toFixed(2) + '%'
+                document.getElementById('day-row').appendChild(day_td);
+            } else {
+                day_td.innerText = 'No enough data'
+                document.getElementById('day-row').appendChild(day_td);
+            }
+
+            if (res.week_return) {
+                week_td.innerText = res.week_return.toFixed(2) + '%'
+                document.getElementById('week-row').appendChild(week_td);
+            } else {
+                week_td.innerText = 'No enough data'
+                document.getElementById('week-row').appendChild(week_td);
+            }
+
+            if (res.month_return) {
+                month_td.innerText = res.month_return.toFixed(2) + '%'
+                document.getElementById('month-row').appendChild(month_td);
+            } else {
+                month_td.innerText = 'No enough data'
+                document.getElementById('month-row').appendChild(month_td);
+            }
+
+            if (res.year_return) {
+                year_td.innerText = res.year_return.toFixed(2) + '%';
+                document.getElementById('year-row').appendChild(year_td);
+            } else {
+                year_td.innerText = 'No enough data'
+                document.getElementById('year-row').appendChild(year_td);
+            }
+            if (res.ytd_return) {
+                ytd_td.innerText = res.ytd_return.toFixed(2) + '%';
+                document.getElementById('ytd-row').appendChild(ytd_td);
+            } else {
+                ytd_td.innerText = 'No enough data'
+                document.getElementById('ytd-row').appendChild(ytd_td);
+            }
+            if (res.three_year_return) {
+                three_td.innerText = res.three_year_return.toFixed(2) + '%';
+                document.getElementById('three-row').appendChild(three_td);
+            } else {
+                three_td.innerText = 'No enough data'
+                document.getElementById('three-row').appendChild(three_td);
+            }
+
+            if (res.five_year_return) {
+                five_td.innerText = res.five_year_return.toFixed(2) + '%';
+                document.getElementById('five-row').appendChild(five_td);
+            } else {
+                five_td.innerText = 'No enough data'
+                document.getElementById('five-row').appendChild(five_td);
+            }
+            }
+
         function searchHandler() {
-            let url = '/stock' + document.getElementById('myInput').value;
+            console.log(document.getElementById('input-box').value);
+            let input = document.getElementById('input-box').value;
+
+            let url = '/details/search/' + input;
             let request = new Request(url, {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'}
@@ -55,107 +151,158 @@ html
                 })
                 .then(function (res) {
                     let ul = document.getElementById("fullUL");
-                        ul.innerHTML = '';
+                    ul.innerHTML = '';
                     let option, a;
-                    for(let i = 0; i < res.sorted.length; i++) {
+                    for (let i = 0; i < res.sorted.length; i++) {
                         option = document.createElement('option');
                         a = document.createElement('a');
-                        a.innerText = res.sorted[i].choice;
-                        option.value = res.sorted[i].choice;
+                        a.innerText = res.sorted[i].stock_name;
+                        option.value = res.sorted[i].stock_name;
+                        search_result = res.sorted;
                         console.log("Im here");
                         ul.appendChild(option);
                     }
                 })
         }
 
-
-        document.getElementById('add').addEventListener('click', function () {
-            var value = document.getElementById('myInput').value;
-            if (value) {
-                console.log('Button clicked');
-                addItemToDOM(value);
+        async function addHandler(){
+            let item;
+            for (let i = 0; i < search_result.length; i++) {
+                if (search_result[i].stock_name === document.getElementById('input-box').value) {
+                    item = search_result[i];
+                }
             }
-        });
+            console.log(item);
+            let url = '/stocks/add/' + item.ticker;
+            console.log(url);
+            let res = await fetch(url);
+            res = await res.json();
+            res = await Promise.resolve(res);
+            console.log(res.day_return);
+            let row = document.createElement('tr');
+            let market_td = document.createElement('td');
+            let symbol = document.createElement('td');
+            let name_td = document.createElement('td');
+            let price_td = document.createElement('td');
+            let action_td = document.createElement('td');
+            let button = document.createElement('button');
+            button.innerText = 'Remove';
+            button.addEventListener("click", removeHandler);
+            action_td.appendChild(button);
+            let view_button = document.createElement('button');
+            view_button.innerText = 'View';
+            view_button.addEventListener('click', viewHandler);
+            action_td.appendChild(view_button);
+            market_td.innerText = res.market;
+            symbol.innerText = res.symbol;
+            price_td.innerText = res.price.toFixed(2);
+            name_td.innerText = res.stock_name;
+            row.appendChild(market_td);
+            row.appendChild(symbol);
+            row.appendChild(name_td);
+            row.appendChild(price_td);
+            row.appendChild(action_td);
+            row.classList.add(res.symbol);
+            document.getElementById('price-table').appendChild(row);
 
-        function addItemToDOM(text) {
-            var list = document.getElementById('added');
-
-            var item = document.createElement('li');
-            item.innerText = text;
-
-            var buttons = document.createElement('div');
-            buttons.classList.add('buttons');
-
-            var remove = document.createElement('button');
-            remove.classList.add('remove');
-            remove.innerHTML = removeSVG;
-
-            var view_stock = document.createElement('button');
-            view_stock.classList.add('viewStock');
-            view_stock.innerHTML = viewSVG;
-
-            // Add click event for removing the item
-            remove.addEventListener('click', removeItem);
-            // Add click event for viewing the item
-            view_stock.addEventListener('click', detailsPageHandler)
-
-            if(data.assets.indexOf(text) === -1 && current_data.indexOf(text) === -1) {
-                console.log('heshd');
-                buttons.appendChild(remove);
-                buttons.appendChild(view_stock)
-                item.appendChild(buttons);
-                list.insertBefore(item, list.childNodes[0]);
-                current_data.push(text);
-                data.assets.push(text);
+            let symbol_td = document.createElement("td")
+            symbol_td.classList.add('st');
+            symbol_td.classList.add(res.symbol);
+            symbol_td.innerText = res.symbol;
+            document.getElementById('st-row').appendChild(symbol_td);
+            let day_td = document.createElement("td");
+            day_td.classList.add(res.symbol);
+            let week_td = document.createElement("td");
+            week_td.classList.add(res.symbol);
+            let month_td = document.createElement("td");
+            month_td.classList.add(res.symbol);
+            let year_td = document.createElement("td");
+            year_td.classList.add(res.symbol);
+            let ytd_td = document.createElement("td");
+            ytd_td.classList.add(res.symbol);
+            let three_td = document.createElement("td");
+            three_td.classList.add(res.symbol);
+            let five_td = document.createElement("td");
+            five_td.classList.add(res.symbol);
+            let last_update_td = document.createElement('td');
+            last_update_td.classList.add(res.symbol);
+            last_update_td.innerText = res.last_update;
+            document.getElementById('date-row').appendChild(last_update_td);
+            if (res.day_return) {
+                day_td.innerText = res.day_return.toFixed(2) + '%'
+                document.getElementById('day-row').appendChild(day_td);
+            } else {
+                day_td.innerText = 'No enough data'
+                document.getElementById('day-row').appendChild(day_td);
             }
-            else if(data.assets.indexOf(text) > -1 && current_data.indexOf(text) === -1){
-                buttons.appendChild(remove);
-                buttons.appendChild(view_stock)
-                item.appendChild(buttons);
-                list.insertBefore(item, list.childNodes[0]);
-                current_data.push(text);
+
+            if (res.week_return) {
+                week_td.innerText = res.week_return.toFixed(2) + '%'
+                document.getElementById('week-row').appendChild(week_td);
+            } else {
+                week_td.innerText = 'No enough data'
+                document.getElementById('week-row').appendChild(week_td);
             }
-            else if(data.assets.indexOf(text) > -1 && current_data.indexOf(text) > -1){
-                let message = 'The stock with name: ' + text + " is already in the list!";
-                console.log(message);
-                alert(message);
+
+            if (res.month_return) {
+                month_td.innerText = res.month_return.toFixed(2) + '%'
+                document.getElementById('month-row').appendChild(month_td);
+            } else {
+                month_td.innerText = 'No enough data'
+                document.getElementById('month-row').appendChild(month_td);
             }
+
+            if (res.year_return) {
+                year_td.innerText = res.year_return.toFixed(2) + '%';
+                document.getElementById('year-row').appendChild(year_td);
+            } else {
+                year_td.innerText = 'No enough data'
+                document.getElementById('year-row').appendChild(year_td);
+            }
+            if (res.ytd_return) {
+                ytd_td.innerText = res.ytd_return.toFixed(2) + '%';
+                document.getElementById('ytd-row').appendChild(ytd_td);
+            } else {
+                ytd_td.innerText = 'No enough data'
+                document.getElementById('ytd-row').appendChild(ytd_td);
+            }
+            if (res.three_year_return) {
+                three_td.innerText = res.three_year_return.toFixed(2) + '%';
+                document.getElementById('three-row').appendChild(three_td);
+            } else {
+                three_td.innerText = 'No enough data'
+                document.getElementById('three-row').appendChild(three_td);
+            }
+
+            if (res.five_year_return) {
+                five_td.innerText = res.five_year_return.toFixed(2) + '%';
+                document.getElementById('five-row').appendChild(five_td);
+            } else {
+                five_td.innerText = 'No enough data'
+                document.getElementById('five-row').appendChild(five_td);
+            }
+
+            document.getElementById('input-box').value = '';
+
         }
 
-        function removeItem() {
-            var item = this.parentNode.parentNode;
-            var parent = item.parentNode;
-            var id = parent.id;
-            var value = item.innerText;
-            data.assets.splice(data.assets.indexOf(value), 1);
-            current_data.splice(current_data.indexOf(value), 1);
-            parent.removeChild(item);
-            console.log(data.assets);
+        function removeHandler(){
+            console.log(page_id);
+            let className = this.parentNode.parentNode.className;
+            let elements = document.getElementsByClassName(className);
+            let parent;
+            while(elements.length !== 0){
+                for (let i = 0; i < elements.length; i++) {
+                    parent = elements[i].parentNode;
+                    parent.removeChild(elements[i]);
+                }
+            }
         }
-
-        function detailsPageHandler() {
-            console.log('Button cliceksadf')
-            let stock_symbol = 'aapl';
-            let url = 'http://localhost:3000/details?stock_symbol=' + stock_symbol;
+        function viewHandler(){
+            let ticker = this.parentNode.parentNode.className;
+            let url = '/stocks/' + ticker;
             window.location.assign(url);
         }
 
-        function updateDB() {
-            console.log(data);
-            let url = '/stock/' + data._id;
-            let request = new Request(url, {
-                method: 'PUT',
-                body: JSON.stringify(data),
-                headers: {'Content-Type': 'application/json'}
-            });
-
-            fetch(request)
-                .then(function (response) {
-                    return response.json()
-                })
-                .then(function (res) {
-                    return alert(res.message)
-                });
-        }
 
 

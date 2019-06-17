@@ -1,0 +1,187 @@
+html
+    head
+        link(rel="stylesheet" type="text/css" href="/css/details.css")
+
+    body(onload='loadAll()')
+        section
+            div
+                div#header-div
+                    h3#header-text
+            div
+                div#input-div
+                    input#input-box(type="text", placeholder='Input Stock name...', list='fullUL', onkeyup='searchHandler()')
+                    button#add-button(onclick='addHandler()') Add
+                div#result-div
+                    datalist
+                        select(size=10)#fullUL
+
+            div
+                div#stock-div
+                    div#table-header
+                        span.ticker <b>Ticker</b>
+                        span <b>Stock Name<b>
+                    ul.stock-list#stock-list
+
+
+
+    script.
+        let watchlist = !{result};
+        let assets = [];
+        let search_result = [];
+        // $('.flexdatalist').flexdatalist({
+        //     selectionRequired: 1,
+        //     searchDisabled: 1,
+        //     minLength: 1
+        // });
+        function loadAll() {
+            document.getElementById('header-text').innerText = 'Watchlist Name: ' + watchlist.name;
+            if (watchlist.assets.length !== 0) {
+                assets = watchlist.assets;
+                for (let i = 0; i < assets.length; i++) {
+                    let list = document.getElementById('stock-list');
+                    let li = document.createElement('li');
+                    let ticker = document.createElement('span');
+                    ticker.innerText = assets[i].ticker;
+                    ticker.classList.add('ticker');
+                    let span = document.createElement('span');
+                    span.innerText = assets[i].stock_name;
+                    li.appendChild(ticker);
+                    li.appendChild(span);
+                    let div = document.createElement('div');
+                    let remove = document.createElement('button');
+                    remove.innerText = 'Remove';
+                    let view = document.createElement('button');
+                    view.innerText = 'View';
+                    remove.addEventListener('click', deleteHandler);
+                    view.addEventListener('click', viewHandler);
+                    div.appendChild(remove);
+                    div.appendChild(view);
+                    li.appendChild(div);
+                    list.insertBefore(li, list.childNodes[0]);
+                }
+            }
+            else{
+                document.getElementById('table-header').style.display ='none';
+            }
+        }
+        function searchHandler(){
+            let input = document.getElementById('input-box').value;
+            let url = '/details/search/' +input;
+            let request = new Request(url, {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'}
+            });
+
+            fetch(request)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (res) {
+                    let ul = document.getElementById("fullUL");
+                    ul.style.display = 'block';
+                    ul.innerHTML = '';
+                    let option, a;
+                    for (let i = 0; i < res.sorted.length; i++) {
+                        option = document.createElement('option');
+                        a = document.createElement('a');
+                        a.innerText = res.sorted[i].ticker + '   ' +res.sorted[i].stock_name;
+                        option.innerText = res.sorted[i].ticker + '   ' +res.sorted[i].stock_name;
+                        let input_search = res.sorted[i].ticker + ' ' +res.sorted[i].stock_name;
+                        option.addEventListener('click', function () {
+                            document.getElementById('input-box').value = input_search})
+                        search_result = res.sorted;
+
+                        ul.appendChild(option);
+                    }
+                })
+        }
+
+        async function addHandler(){
+            let found = 0;
+            let input = document.getElementById('input-box').value;
+            let name;
+            for(let i=0; i<assets.length; i++){
+                if(assets[i].ticker + ' ' + assets[i].stock_name === input){
+                    found = 1;
+                }
+            }
+
+            if(found === 1){
+                window.alert('The stock is already in the list');
+            }
+            else {
+                let list = document.getElementById('stock-list');
+                let li = document.createElement('li');
+                let ticker = document.createElement('span');
+                let item;
+                for(let i = 0; i < search_result.length; i++){
+                    console.log((search_result[i].ticker + ' ' + search_result[i].stock_name));
+                    console.log(document.getElementById('input-box').value);
+                    if((search_result[i].ticker + ' ' + search_result[i].stock_name) === document.getElementById('input-box').value){
+                        ticker.innerText = search_result[i].ticker;
+                        item = search_result[i];
+                        console.log(search_result[i]);
+                    }
+                }
+                ticker.classList.add('ticker');
+                let span = document.createElement('span');
+                span.innerText = item.stock_name;
+                li.appendChild(ticker);
+                li.appendChild(span);
+                let div = document.createElement('div');
+                let remove = document.createElement('button');
+                remove.innerText = 'Remove';
+                let view = document.createElement('button');
+                view.innerText = 'View';
+                remove.addEventListener('click', deleteHandler);
+                view.addEventListener('click', viewHandler);
+                div.appendChild(remove);
+                div.appendChild(view);
+                li.appendChild(div);
+                list.insertBefore(li, list.childNodes[0]);
+                assets.push(item);
+                document.getElementById('table-header').style.display ='';
+                updateDB();
+                document.getElementById('fullUL').innerHTML ='';
+                document.getElementById('fullUL').style.display = 'none';
+                document.getElementById('input-box').value = '';
+            }
+        }
+
+        async function deleteHandler(){
+            let item = this.parentNode.parentNode;
+            let span = item.getElementsByTagName('span')[0];
+            let name = span.innerText;
+            assets.splice(assets.indexOf(name), 1);
+            let parent = item.parentNode;
+            parent.removeChild(item);
+            if(assets.length === 0){
+                document.getElementById('table-header').style.display ='none';
+            }
+            updateDB();
+        }
+
+        async function updateDB(){
+            let url = '/details/' + watchlist.name;
+            let request = new Request(url, {
+                method: 'PUT',
+                body: JSON.stringify(assets),
+                headers: {'Content-Type':'application/json'}
+            });
+            let result = await fetch(request);
+            result = await result.json();
+            result = await Promise.resolve(result);
+            if(result !== 'Successfully updated'){
+                window.alert(result)
+            }
+        }
+
+        function viewHandler(){
+            let item = this.parentNode.parentNode;
+            let span = item.getElementsByTagName('span')[0];
+            let ticker = span.innerText;
+            let url = '/stocks/' + ticker;
+            window.location.assign(url);
+        }
+
+

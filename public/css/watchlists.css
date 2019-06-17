@@ -13,29 +13,6 @@
     margin: auto;
 }
 
-
-
-#price-table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    margin: auto;
-    width: 980px;
-    padding: 8px;
-}
-
-#price-table tr:nth-child(even){background-color: #f2f2f2;}
-
-#price-table td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-}
-
-#price-table th{
-    background: #95a5a6;
-}
-
-
 #input-div{
     margin: auto;
     width: 980px;
@@ -49,36 +26,58 @@
 
 
 
-#search-button{
+#add-button{
     height: 35px;
     width: 55px;
     float: right;
 }
 
-#return-div{
+#watchlist-div {
+    font-family: arial, sans-serif;
     margin: auto;
     width: 980px;
+    padding: 8px;
 }
 
-#return-table{
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
+
+.wl-list{
+    list-style-type: none;
+    padding-inline-start: 0px;
+
+}
+
+.wl-list li {
+    padding: 10px;
+    border: 1px solid #dddddd;
+}
+
+.wl-list li > h3 {
+    width: 600px;
+}
+.wl-list li > div{
+    float: right;
+}
+
+.wl-list li > div > button{
+    margin-left: 5px;
+}
+
+#delete-div{
+    margin: auto;
+    width: 980px;
+    padding: 8px;
+    text-align: center;
+}
+
+#delete-div > button{
+    color: #ED4F32;
+    padding: 5px;
     margin: auto;
 }
 
-#return-table th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-    background: #95a5a6;
-}
-
-#return-table td{
-    border: 1px solid #dddddd;
-    text-align: center;
-    padding: 8px;
-}
-
-.st{
-    font-weight: bold;
+#delete-div > button:hover{
+    background-color: #ED4F32;
+    color: #f2f2f2;
+    padding: 5px;
+    margin: auto;
 }

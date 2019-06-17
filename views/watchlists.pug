@@ -1,19 +1,24 @@
 html
     head
         link(rel="stylesheet" type="text/css" href="/css/watchlists.css")
-    body(onload='first()')
+        script(src="/js/watchlists.js")
+    body(onload='loadAll()')
         section
+            div
+                div#header-div
+                    h3#header-text Your Watchlists
             div
                 div#input-div
                     input#input-box(type="text" placeholder='Input Watchlist name...' onkeyup='enter_key_handler()')
-                    button#search-button(onclick='addHandler()') Add
+                    button#add-button(onclick='addHandler()') Add
             div
                 div#watchlist-div
-                    ul#wl-list
-                        li
-                            h3
-                            button Delete
-                            button View
+                    ul.wl-list#wl-list
+            div
+                div#delete-div
+                    button(onclick='deleteAllHandler()') DELETE ALL
+    script.
+
 
 
 
